@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+
+    background: url("./images/forest.jpg") no-repeat center center fixed;
+    background-size: cover;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.4);
+    z-index: -1;
+}
+
+h2 {
+    margin-top: 20px;
+}
+
+#canvas-container {
+    margin-top: 20px;
+}
+
+.time-box {
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+
+    background: rgba(0, 0, 0, 0.4);
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+
+.alert-popup {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: red;
+    color: white;
+    padding: 20px 40px;
+    font-size: 24px;
+    border-radius: 10px;
+    display: none;
+    z-index: 999;
+}
+
+.control-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 20px;
+    border-radius: 10px;
+
+    backdrop-filter: blur(10px);
+
+    z-index: 1000;
+}
+
+.control-panel button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.control-panel input[type="range"] {
+    width: 100%;
+}
