@@ -8,7 +8,7 @@ body {
     background-size: cover;
 }
 
-/* 背景遮罩（最底层） */
+
 body::before {
     content: "";
     position: fixed;
@@ -20,13 +20,12 @@ body::before {
     z-index: 0;
 }
 
-/* 页面内容在上层 */
+
 body > * {
     position: relative;
     z-index: 1;
 }
 
-/* 首页 */
 .home {
     margin-top: 150px;
 }
@@ -36,7 +35,6 @@ body > * {
     font-size: 20px;
 }
 
-/* 语言 */
 .lang-box {
     position: fixed;
     top: 20px;
@@ -44,7 +42,6 @@ body > * {
     z-index: 100;
 }
 
-/* 时间 */
 .time-box {
     margin-top: 10px;
     font-size: 20px;
@@ -53,7 +50,6 @@ body > * {
     border-radius: 8px;
 }
 
-/* 控制面板 */
 .control-panel {
     position: fixed;
     top: 20px;
@@ -64,7 +60,6 @@ body > * {
     z-index: 100;
 }
 
-/* 🎥 摄像头居中 */
 #canvas-container {
     position: relative;
     z-index: 1;
@@ -73,10 +68,9 @@ body > * {
     justify-content: center;
     align-items: center;
 
-    margin-top: 60px;
+    margin-top: 30px/80px;
 }
 
-/* 提示框 */
 .alert-popup {
     position: fixed;
     top: 20%;
@@ -90,13 +84,11 @@ body > * {
     z-index: 999;
 }
 
-/* 状态颜色 */
 .alert-danger { background:#e74c3c; }
 .alert-warning { background:#f1c40f; }
 .alert-info { background:#3498db; }
 .alert-success { background:#2ecc71; }
 
-/* 启动提示 */
 .start-tip {
     position: fixed;
     top: 40%;

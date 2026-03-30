@@ -1,4 +1,3 @@
-// 🌍 多语言
 const LANG = {
     zh:{
         title:"护眼检测系统",
@@ -34,16 +33,13 @@ const LANG = {
 
 let currentLang = localStorage.getItem("lang") || "zh";
 
-// 🎥
 let video, classifier, label="...";
 let tooCloseTimer=0, alertShow=false;
 const DELAY_TIME=2000;
 
-// ⏰
 let startTime=Date.now(), lastBreakTime=0;
 const BREAK_INTERVAL=30*60*1000;
 
-// 🔊
 const soundList=[
     new Audio("./audio/alert1.mp3"),
     new Audio("./audio/alert2.mp3"),
@@ -59,21 +55,18 @@ let audioUnlocked=false;
 
 soundList.forEach(s=>s.loop=true);
 
-// 🚀 启动
 function startApp(){
     homePage.style.display="none";
     appPage.style.display="block";
     showStartTip();
 }
 
-// 提示
 function showStartTip(){
     startTip.innerText=LANG[currentLang].startTip;
     startTip.style.display="block";
     setTimeout(()=>startTip.style.display="none",3000);
 }
 
-// 🌍 语言应用
 function applyLang(){
     const t=LANG[currentLang];
     title.innerText=t.title;
@@ -82,7 +75,6 @@ function applyLang(){
     appTitle.innerText=t.title;
 }
 
-// 语言切换
 langSelector.value=currentLang;
 langSelector.onchange=(e)=>{
     currentLang=e.target.value;
@@ -90,7 +82,6 @@ langSelector.onchange=(e)=>{
     applyLang();
 };
 
-// p5
 function preload(){
     classifier=ml5.imageClassifier('model/model.json');
 }
@@ -107,7 +98,6 @@ function setup(){
     setupUI();
 }
 
-// 识别
 function classifyVideo(){
     classifier.classify(video,(e,r)=>{
         if(!e) label=r[0].label;
@@ -115,7 +105,6 @@ function classifyVideo(){
     });
 }
 
-// 主循环
 function draw(){
     push();
     translate(width,0);
@@ -133,7 +122,6 @@ function draw(){
     }
 }
 
-// 时间
 function updateTime(){
     let t=Date.now()-startTime;
     let s=Math.floor(t/1000);
@@ -150,7 +138,6 @@ function updateTime(){
     }
 }
 
-// 状态
 function handleTooClose(){
     tooCloseTimer+=deltaTime;
     if(tooCloseTimer>DELAY_TIME){
@@ -171,7 +158,6 @@ function handleBackground(){
     playSound();
 }
 
-// 提示框
 function showPopup(text,type){
     const el=alertText;
 
@@ -185,7 +171,6 @@ function showPopup(text,type){
     el.style.display="block";
 }
 
-// 声音
 function playSound(){
     if(soundEnabled && audioUnlocked && !alertShow){
         alertShow=true;
@@ -199,14 +184,12 @@ function resetSound(){
     alertShow=false;
 }
 
-// 重置
 function resetAlert(){
     tooCloseTimer=0;
     resetSound();
     alertText.style.display="none";
 }
 
-// UI
 function setupUI(){
     soundToggle.innerText=soundEnabled?"🔊":"🔇";
 
@@ -255,14 +238,12 @@ function setup(){
     setupUI();
 }
 
-// 小窗
 async function enablePiP(){
     if(document.pictureInPictureEnabled){
         await document.querySelector("video").requestPictureInPicture();
     }
 }
 
-// 自动解锁音频
 document.body.addEventListener("click",()=>{
     if(!audioUnlocked){
         ALERT_SOUND.play().then(()=>{
