@@ -2,12 +2,13 @@ body {
     margin: 0;
     color: white;
     text-align: center;
-    font-family: Arial, sans-serif;
+    font-family: Arial;
 
     background: url("./images/forest.jpg") no-repeat center center fixed;
     background-size: cover;
 }
 
+/* 背景遮罩（最底层） */
 body::before {
     content: "";
     position: fixed;
@@ -15,69 +16,95 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-
-    background: rgba(0, 0, 0, 0.4);
-    z-index: -1;
+    background: rgba(0,0,0,0.4);
+    z-index: 0;
 }
 
-h2 {
-    margin-top: 20px;
+/* 页面内容在上层 */
+body > * {
+    position: relative;
+    z-index: 1;
 }
 
-#canvas-container {
-    margin-top: 20px;
+/* 首页 */
+.home {
+    margin-top: 150px;
 }
 
+.home button {
+    padding: 15px 40px;
+    font-size: 20px;
+}
+
+/* 语言 */
+.lang-box {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+/* 时间 */
 .time-box {
     margin-top: 10px;
     font-size: 20px;
-    font-weight: bold;
-
-    background: rgba(0, 0, 0, 0.4);
-    display: inline-block;
+    background: rgba(0,0,0,0.4);
     padding: 8px 16px;
     border-radius: 8px;
 }
 
+/* 控制面板 */
+.control-panel {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.5);
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 100;
+}
 
+/* 🎥 摄像头居中 */
+#canvas-container {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 60px;
+}
+
+/* 提示框 */
 .alert-popup {
     position: fixed;
     top: 20%;
     left: 50%;
     transform: translateX(-50%);
-    background: red;
-    color: white;
-    padding: 20px 40px;
-    font-size: 24px;
+    padding: 20px 30px;
     border-radius: 10px;
+    font-size: 20px;
     display: none;
+    color: white;
     z-index: 999;
 }
 
-.control-panel {
+/* 状态颜色 */
+.alert-danger { background:#e74c3c; }
+.alert-warning { background:#f1c40f; }
+.alert-info { background:#3498db; }
+.alert-success { background:#2ecc71; }
+
+/* 启动提示 */
+.start-tip {
     position: fixed;
-    top: 20px;
-    right: 20px;
-
-    background: rgba(0, 0, 0, 0.5);
-    padding: 15px 20px;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    padding: 20px 30px;
     border-radius: 10px;
-
-    backdrop-filter: blur(10px);
-
-    z-index: 1000;
-}
-
-.control-panel button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 8px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-}
-
-.control-panel input[type="range"] {
-    width: 100%;
+    display: none;
+    z-index: 999;
 }

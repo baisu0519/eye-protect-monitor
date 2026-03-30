@@ -1,44 +1,59 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <title>护眼检测系统</title>
+<meta charset="UTF-8">
+<title>护眼检测系统</title>
 
-    <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/ml5@0.12.2/dist/ml5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ml5@0.12.2/dist/ml5.min.js"></script>
 </head>
 
 <body>
 
-<h2>👁 护眼距离监测系统</h2>
+<select id="langSelector" class="lang-box">
+    <option value="zh">中文</option>
+    <option value="en">English</option>
+    <option value="ko">한국어</option>
+</select>
+
+<div id="homePage" class="home">
+    <h1 id="title"></h1>
+    <p id="desc"></p>
+    <button onclick="startApp()" id="startBtn"></button>
+</div>
+
+<div id="appPage" style="display:none">
+
+<h2 id="appTitle"></h2>
+
 <button onclick="enablePiP()">📺 小窗模式</button>
 
-<div id="timeDisplay" class="time-box">使用时长：00:00:00</div>
+<div id="timeDisplay" class="time-box"></div>
+
 <div class="control-panel">
-    <div>🔊 音频控制</div>
-    
-    <button id="soundToggle">🔊 关闭提示音</button>
+    <button id="soundToggle"></button>
 
     <br>音量：
-    <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="1">
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
 
-    <br><br>提示音：
+    <br><br>
     <select id="soundSelector">
-        <option value="0">提示音1</option>
-        <option value="1">提示音2</option>
-        <option value="2">提示音3</option>
-        <option value="3">提示音4</option>
+        <option value="0">Sound 1</option>
+        <option value="1">Sound 2</option>
+        <option value="2">Sound 3</option>
+        <option value="3">Sound 4</option>
     </select>
 </div>
 
 <div id="canvas-container"></div>
 
-<div class="alert-popup">⚠ 请后退！距离过近</div>
+<div id="alertText" class="alert-popup"></div>
+<div id="startTip" class="start-tip"></div>
+
+</div>
 
 <script src="sketch.js"></script>
-
 </body>
 </html>
