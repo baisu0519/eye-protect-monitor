@@ -3,31 +3,57 @@ const LANG = {
         title:"护眼检测系统",
         desc:"基于AI的距离检测",
         start:"开始",
+
         tooClose:"⚠ 请后退！距离过近",
         tooFar:"距离过远，请靠近",
         background:"未检测到人脸",
+
         break:"⏰ 请休息一下",
-        startTip:"⚠ 启动前请点击右上角按钮开启声音"
+        startTip:"⚠ 启动前请点击右上角按钮开启声音",
+
+        soundOn:"🔊 关闭提示音",
+        soundOff:"🔇 开启提示音",
+
+        volume:"音量",
+        backgroundLabel:"背景"
     },
+
     en:{
-        title:"Eye Protection",
-        desc:"AI distance detection",
+        title:"Eye Protection System",
+        desc:"AI Distance Detection",
         start:"Start",
+
         tooClose:"⚠ Too Close!",
         tooFar:"Too Far",
-        background:"No face detected",
+        background:"No Face Detected",
+
         break:"⏰ Take a break",
-        startTip:"⚠ Click top-right button to enable sound"
+        startTip:"⚠ Click top-right button to enable sound",
+
+        soundOn:"🔊 Sound Off",
+        soundOff:"🔇 Sound On",
+
+        volume:"Volume",
+        backgroundLabel:"Background"
     },
+
     ko:{
         title:"눈 보호 시스템",
         desc:"AI 거리 감지",
         start:"시작",
+
         tooClose:"⚠ 너무 가까움",
         tooFar:"너무 멀어요",
         background:"얼굴 감지 안됨",
+
         break:"⏰ 휴식하세요",
-        startTip:"⚠ 우측 버튼 눌러 소리 활성화"
+        startTip:"⚠ 우측 버튼 눌러 소리 활성화",
+
+        soundOn:"🔊 소리 끄기",
+        soundOff:"🔇 소리 켜기",
+
+        volume:"볼륨",
+        backgroundLabel:"배경"
     }
 };
 
@@ -55,11 +81,13 @@ let audioUnlocked=false;
 
 soundList.forEach(s=>s.loop=true);
 
+
 function startApp(){
     homePage.style.display="none";
     appPage.style.display="block";
     showStartTip();
 }
+
 
 function showStartTip(){
     startTip.innerText=LANG[currentLang].startTip;
@@ -67,12 +95,39 @@ function showStartTip(){
     setTimeout(()=>startTip.style.display="none",3000);
 }
 
+
 function applyLang(){
-    const t=LANG[currentLang];
-    title.innerText=t.title;
-    desc.innerText=t.desc;
-    startBtn.innerText=t.start;
-    appTitle.innerText=t.title;
+    const t = LANG[currentLang];
+
+
+    title.innerText = t.title;
+    desc.innerText = t.desc;
+    startBtn.innerText = t.start;
+
+
+    appTitle.innerText = t.title;
+
+
+    soundToggle.innerText = soundEnabled ? t.soundOn : t.soundOff;
+
+
+    document.querySelector(".control-panel").innerHTML = `
+        <button id="soundToggle">${soundEnabled ? t.soundOn : t.soundOff}</button>
+        <br>${t.volume}：
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01">
+        <br><br>
+        <select id="soundSelector">
+            <option value="0">Sound 1</option>
+            <option value="1">Sound 2</option>
+            <option value="2">Sound 3</option>
+            <option value="3">Sound 4</option>
+        </select>
+        <br><br>
+        <br>${t.backgroundLabel}：
+        <input type="file" id="bgUploader" accept="image/*">
+    `;
+
+    setupUI();
 }
 
 langSelector.value=currentLang;
@@ -87,15 +142,17 @@ function preload(){
 }
 
 function setup(){
-    let c=createCanvas(800,600);
-    c.parent("canvas-container");
+    let canvas = createCanvas(800,600);
+    canvas.parent("canvas-container");
 
-    video=createCapture(VIDEO);
+    video = createCapture(VIDEO);
     video.hide();
 
     classifyVideo();
     applyLang();
     setupUI();
+    loadSavedBackground();
+    setupBackgroundUploader();
 }
 
 function classifyVideo(){
@@ -160,7 +217,6 @@ function handleBackground(){
 
 function showPopup(text,type){
     const el=alertText;
-
     el.className="alert-popup";
     el.innerText=text;
 
@@ -191,9 +247,11 @@ function resetAlert(){
 }
 
 function setupUI(){
-    soundToggle.innerText=soundEnabled?"🔊":"🔇";
+    const btn = document.getElementById("soundToggle");
+    const slider = document.getElementById("volumeSlider");
+    const selector = document.getElementById("soundSelector");
 
-    soundToggle.onclick=()=>{
+    btn.onclick = ()=>{
         if(!audioUnlocked){
             ALERT_SOUND.play().then(()=>{
                 ALERT_SOUND.pause();
@@ -202,40 +260,60 @@ function setupUI(){
         }
 
         soundEnabled=!soundEnabled;
-        soundToggle.innerText=soundEnabled?"🔊":"🔇";
+        btn.innerText = soundEnabled 
+            ? LANG[currentLang].soundOn 
+            : LANG[currentLang].soundOff;
 
         localStorage.setItem("soundEnabled",soundEnabled);
 
         if(!soundEnabled) resetSound();
     };
 
-    volumeSlider.value=localStorage.getItem("volume")||1;
-
-    volumeSlider.oninput=(e)=>{
+    slider.value=localStorage.getItem("volume")||1;
+    slider.oninput=(e)=>{
         soundList.forEach(s=>s.volume=e.target.value);
         localStorage.setItem("volume",e.target.value);
     };
 
-    soundSelector.value=currentSoundIndex;
-
-    soundSelector.onchange=(e)=>{
+    selector.value=currentSoundIndex;
+    selector.onchange=(e)=>{
         ALERT_SOUND.pause();
         currentSoundIndex=e.target.value;
         ALERT_SOUND=soundList[currentSoundIndex];
         localStorage.setItem("soundIndex",currentSoundIndex);
     };
 }
-function setup(){
-    let canvas = createCanvas(800,600);
-    canvas.parent("canvas-container");
 
-    video = createCapture(VIDEO);
-    video.size(800,600);
-    video.hide();
+function loadSavedBackground(){
+    const savedBg = localStorage.getItem("userBg");
+    if(savedBg){
+        document.body.style.background =
+            `url(${savedBg}) no-repeat center center fixed`;
+        document.body.style.backgroundSize = "cover";
+    }
+}
 
-    classifyVideo();
-    applyLang();
-    setupUI();
+function setupBackgroundUploader(){
+    const uploader = document.getElementById("bgUploader");
+    if(!uploader) return;
+
+    uploader.onchange = (e)=>{
+        const file = e.target.files[0];
+        if(!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event){
+            const imgData = event.target.result;
+
+            document.body.style.background =
+                `url(${imgData}) no-repeat center center fixed`;
+            document.body.style.backgroundSize = "cover";
+
+            localStorage.setItem("userBg", imgData);
+        };
+
+        reader.readAsDataURL(file);
+    };
 }
 
 async function enablePiP(){
