@@ -350,25 +350,6 @@ function showStartTip() {
   setTimeout(() => { el.style.display = "none"; }, 3500);
 }
 
-function loadSavedBackground() {
-  const saved = localStorage.getItem("userBg");
-  if (saved) applyBackground(saved);
-}
-function setupBackgroundUploader() {
-  const up = document.getElementById("bgUploader");
-  if (!up) return;
-  up.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => { applyBackground(ev.target.result); localStorage.setItem("userBg", ev.target.result); };
-    reader.readAsDataURL(file);
-  };
-}
-function applyBackground(src) {
-  document.body.style.background = `url(${src}) no-repeat center center fixed`;
-  document.body.style.backgroundSize = "cover";
-}
 
 async function enablePiP() {
   if (!document.pictureInPictureEnabled) return;
@@ -403,7 +384,7 @@ function applyLang() {
     "ctaTitle","ctaSub","ctaBtn","footerText",
 
 
-    "appTitle","statusLabel","pipLabel","volumeLabel","soundLabel","bgLabel",
+    "appTitle","statusLabel","pipLabel","volume","soundLabel","bgLabel"
   ].forEach(id => setText(id, t[id]));
 
   const st = document.getElementById("soundToggle");
